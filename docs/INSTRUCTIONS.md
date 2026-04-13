@@ -13,7 +13,7 @@ De focus van deze sprint ligt op performance en client-side scripting.
 
 ## Werkwijze
 
-Dese sprint ga je de feedback van de opdrachtgever verwerken en bouw je verder aan interactieve componenten. Je breidt deze sprint je code uit met verschillende technieken die ervoor zorgen dat de website een goede Performance heeft, zoals het voorkomen van layout shifts, toepassen van perceived performance en loading hints aan de browser in HTML, en het toepassen van responsive images. 
+Deze sprint ga je de feedback van de opdrachtgever verwerken en bouw je verder aan interactieve componenten. Je breidt deze sprint je code uit met verschillende technieken die ervoor zorgen dat de website een goede Performance heeft, zoals het voorkomen van layout shifts, toepassen van perceived performance en loading hints aan de browser in HTML, en het toepassen van responsive images. 
 
 Deze leertaak wordt behandeld in Sprint 10. Er worden verschillende workshops aangeboden:
 
