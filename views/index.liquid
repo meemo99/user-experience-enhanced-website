@@ -1,0 +1,23 @@
+    {% if stories[0].cover %}
+      <picture   class="hero-cover">
+        <source type="image/avif"
+          srcset="https://fdnd-agency.directus.app/assets/{{ stories[0].cover }}?fit=cover&width=1600&height=900">
+        <source type="image/webp"
+          srcset="https://fdnd-agency.directus.app/assets/{{ stories[0].cover }}?fit=cover&width=1600&height=900">
+        <img 
+          src="https://fdnd-agency.directus.app/assets/{{ stories[0].cover }}?width=600&quality=80"
+          width="{{ stories[0].width }}"
+          height="{{ stories[0].height }}"
+          alt="{{ stories[0].title }}">
+      </picture>
+    {% endif %}
+      {% if story.cover %}
+<picture>
+    <img
+  src="https://fdnd-agency.directus.app/assets/{{ story.cover }}?width=600"
+  width="{{ story.cover.width }}"
+  height="{{ story.cover.height }}"
+  alt="{{ story.title }}"
+class="cover">
+  </picture>
+{% endif %}
