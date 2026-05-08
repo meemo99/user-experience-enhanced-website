@@ -1,6 +1,8 @@
-{% render 'partials/head.liquid', title: 'Buurtcampus-krant' %}
+{% render 'partials/head.liquid', title: 'BuurtCampuskrant' %}
 <button id='openBtn'>
-    <img src="assets/1.LOGOS/Een-dag-bij-Buurtcampus.png" class="menuBtn">
+  <picture>
+    <img src="/assets/1.LOGOS/Buurtcampus82.png" class="menuBtn">
+    </picture>
 </button>
 <nav id="sideNav">
     
@@ -22,56 +24,26 @@
             
      </nav>
     </header>
-    
-<!-- Hero — first/most recent story -->
-<section class="hero">
-  <article class="hero-article district-{{ stories[0].district }}">
-    {% if stories[0].cover %}
-      <picture   class="hero-cover">
-        <source type="image/avif"
-          srcset="https://fdnd-agency.directus.app/assets/{{ stories[0].cover }}?fit=cover&width=1600&height=900">
-        <source type="image/webp"
-          srcset="https://fdnd-agency.directus.app/assets/{{ stories[0].cover }}?fit=cover&width=1600&height=900">
-        <img 
-          src="https://fdnd-agency.directus.app/assets/{{ stories[0].cover }}?width=600&quality=80"
-          width="{{ stories[0].width }}"
-          height="{{ stories[0].height }}"
-          alt="{{ stories[0].title }}">
-      </picture>
-    {% endif %}
-    <div class="hero-content">
-      <span class="district-tag">{{ stories[0].district | capitalize }}</span>
-      <h2>{{ stories[0].title }}</h2>
-      <p>{{ stories[0].intro|truncatewords: 40 }}</p>
-      <a href="/story/{{ stories[0].slug }}">Lees meer →</a>
-    </div>
-  </article>
-</section>
 
-<!-- Article grid — remaining stories -->
 <section class="art-container">
-  {% for story in stories offset: 1 %}
+  {% for story in district %}
     <article class="index-article district-{{ story.district }}">
       {% if story.cover %}
-<picture>
-    <img
-  src="https://fdnd-agency.directus.app/assets/{{ story.cover }}?width=600"
-  width="{{ story.cover.width }}"
-  height="{{ story.cover.height }}"
-  alt="{{ story.title }}"
-class="cover">
-  </picture>
+  <img 
+    src="https://fdnd-agency.directus.app/assets/{{ story.cover }}"   
+    width="{{cover.width}}"
+    alt="{{ story.title }}"
+    class="cover">
 {% endif %}
       <div class="tags">
         <span class="district-tag">{{ story.district | capitalize }}</span>
+        <p class="district-tag">{{ story.target_group |capitalize }}</p>
       </div>
       <h2>{{ story.title }}</h2>
-      <p>{{ story.intro|truncatewords: 20 }}</p>
-      <a href="/story/{{ story.slug }}" class="district-tag">Lees meer </a>
+      <p>{{ story.intro }}</p>
+      <a href="/story/{{ story.slug }}" class="leesmeer">Lees meer</a>
     </article>
   {% endfor %}
-  <img class="logos" src="/assets/1.LOGOS/Buurtcampus69.png">
 </section>
 
-
-{% render 'partials/foot.liquid', img:'/assets/1.LOGOS/Stekje.png' %}
+{% render 'partials/foot.liquid' %}

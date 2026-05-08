@@ -1,8 +1,4 @@
-console.log('Hier komt je server voor Sprint 10.')
 
-console.log('Gebruik uit Sprint 9 alleen de code die je mee wilt nemen.')
-
-console.log('Zet \'m op!')
 import express from 'express'
 
 import { Liquid } from 'liquidjs';
@@ -15,7 +11,7 @@ const engine = new Liquid()
 app.engine('liquid', engine.express())
 app.set('views', './views')
 
-// district fields
+const baseURL = 'https://fdnd-agency.directus.app/items/buurtcampuskrant_stories/'
 
 const districts = ["oost", "nieuw-west", "zuidoost", "algemeen"];
 app.use((req, res, next) => {
@@ -23,29 +19,29 @@ app.use((req, res, next) => {
     next();
 })
 
-// index GET route
 app.get('/', async function (req, res) {
-    const apiResponse = await fetch('https://fdnd-agency.directus.app/items/buurtcampuskrant_stories?sort=-date&limit=5&filter[date][_nnull]=true')
+    const params = new URLSearchParams()
+    params.set('limit', 4)
+    params.set('sort', '-data')
+
+    const apiResponse = await fetch(`${baseURL}?${params.toString()}`)
     const apiResponseJSON = await apiResponse.json()
 
     res.render('index.liquid', { stories: apiResponseJSON.data })
 })
 
-// district GET route
 app.get('/district/:district_name', async function (req, res) {
     const district = req.params.district_name
-    const districtDetailResponse = await fetch('https://fdnd-agency.directus.app/items/buurtcampuskrant_stories?filter[district][_eq]=' + district)
+    const districtDetailResponse = await fetch(`${baseURL}?${params.toString()}`)
 
     const districtDetailResponseJSON = await districtDetailResponse.json()
     res.render('district.liquid', { district: districtDetailResponseJSON.data, districtName: district })
 })
 
-// articles GET route
-
 app.get('/story/:slug', async function (req, res) {
     const slug = req.params.slug
 
-    const storyResponse = await fetch('https://fdnd-agency.directus.app/items/buurtcampuskrant_stories/?filter[slug][_eq]=' + slug + '&fields=*,cover.id,cover.width,cover.height')
+    const storyResponse = await fetch(`${baseURL}?${params.toString()}`)
     const storyJSON = await storyResponse.json()
     const story = storyJSON.data[0]
     const commentsResponse = await fetch('https://fdnd-agency.directus.app/items/buurtcampuskrant_stories_comments?filter[story][_eq]=' + story.id)
@@ -59,43 +55,11 @@ app.get('/story/:slug', async function (req, res) {
     })
 })
 
-// archive GET route
 app.get('/archief', async function (req, res) {
-    const targetGroup = req.query.target_group || ''
-    const activeYear = req.query.year || ''
-
-    let url = 'https://fdnd-agency.directus.app/items/buurtcampuskrant_stories/?sort=-date&filter[date][_nnull]=true'
-
-    if (targetGroup) {
-        url += '&filter[target_group][_eq]=' + targetGroup
-    }
-
-    if (activeYear) {
-        url += '&filter[date][_between]=' + activeYear + '-01-01,' + activeYear + '-12-31'
-    }
-
-    const apiResponse = await fetch(url)
+    const apiResponse = await fetch(`${baseURL}?${params.toString()}`)
     const apiResponseJSON = await apiResponse.json()
-
-    // Get all unique target groups and years
-    const allResponse = await fetch('https://fdnd-agency.directus.app/items/buurtcampuskrant_stories/?fields=target_group,date')
-    const allJSON = await allResponse.json()
-
-    const targetGroups = [...new Set(allJSON.data.map(s => s.target_group).filter(Boolean))]
-    const years = [...new Set(allJSON.data.map(s => s.date && s.date.slice(0, 4)).filter(Boolean))].sort().reverse()
-
-    res.render('archief.liquid', {
-        stories: apiResponseJSON.data,
-        targetGroups: targetGroups,
-        activeGroup: targetGroup,
-        years: years,
-        activeYear: activeYear
-    })
+    res.render('archief.liquid', { stories: apiResponseJSON.data })
 })
-
-
-
-// comments POST 
 
 app.post('/story/:slug', async function (req, res) {
     const slug = req.params.slug

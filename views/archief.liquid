@@ -1,0 +1,87 @@
+{% render 'partials/head.liquid', title: 'BuurtCampuskrant' %}
+<button id='openBtn'>
+    <img src="assets/1.LOGOS/Een-dag-bij-Buurtcampus.png" class="menuBtn">
+</button>
+<nav id="sideNav">
+    
+    <svg onclick="closeNav()" viewBox="0 0 32 32" width="32" height="32">
+			<title>Sluiten</title>
+			<path
+				d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z">
+			</path>
+		</svg>
+    <ul>
+                {% for district in districts%}
+                    
+                    
+                        <li><a href="/district/{{ district }}" class="district-nav district-{{ story.district }}">{{ district |capitalize }}</a></li>
+                    
+                {% endfor %}
+                <li><a href="/archief" class="district-nav">Archief</a></li>
+                </ul>
+            
+     </nav>
+    </header>
+
+
+<!-- Target group filter -->
+<section class="filters">
+  <a href="/archief?year={{ activeYear }}" 
+    class="filter-btn {% if activeGroup == '' %}active{% endif %}">
+    Alle Doelgroepen
+  </a>
+  {% for group in targetGroups %}
+    <a href="/archief?target_group={{ group }}&year={{ activeYear }}" 
+      class="filter-btn {% if activeGroup == group %}active{% endif %}">
+      {{ group | capitalize }}
+    </a>
+  {% endfor %}
+</section>
+
+<!-- Year filter -->
+<section class="filters">
+  <a href="/archief?target_group={{ activeGroup }}" 
+    class="filter-btn {% if activeYear == '' %}active{% endif %}">
+    Alle jaren
+  </a>
+  {% for year in years %}
+    <a href="/archief?target_group={{ activeGroup }}&year={{ year }}" 
+      class="filter-btn {% if activeYear == year %}active{% endif %}">
+      {{ year }}
+    </a>
+  {% endfor %}
+</section>
+
+<main>
+  <h1>Archief 
+    {% if activeGroup %}— {{ activeGroup | capitalize }}{% endif %}
+    {% if activeYear %}— {{ activeYear }}{% endif %}
+  </h1>
+
+  {% assign currentYear = '' %}
+  {% for story in stories %}
+    {% assign storyYear = story.date | slice: 0, 4 %}
+
+    {% if storyYear != currentYear %}
+      {% assign currentYear = storyYear %}
+      <h2 class="archive-year">{{ storyYear }}</h2>
+    {% endif %}
+
+    <article class="archive-item district-{{ story.district }}">
+      <div class="archive-meta">
+        <span class="district-tag">{{ story.district | capitalize }}</span>
+        <span class="district-tag">{{ story.target_group | capitalize }}</span>
+        <time>{{ story.date | slice: 0, 10 }}</time>
+      </div>
+      <a href="/story/{{ story.slug }}">
+        <h3>{{ story.title }}</h3>
+      </a>
+      <p>{{ story.intro }}</p>
+    </article>
+  {% endfor %}
+
+  {% if stories.size == 0 %}
+    <p>Geen artikelen gevonden.</p>
+  {% endif %}
+</main>
+{% render 'partials/foot.liquid' %}

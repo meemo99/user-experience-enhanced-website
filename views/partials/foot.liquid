@@ -1,0 +1,26 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a>
+        <h3>Buurtcampus</h3>
+      </a>
+      <p>Waar leren tot leven komt.</p>
+    </div>
+
+    {% if img %}
+      <img src="/assets/1.LOGOS/Stekje.png" alt="Header image" class="menuBtn">
+    {% endif %}
+
+    <nav class="footer-nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/archief">Archief</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer-meta">
+      <p>&copy; {{ 'now' | date: '%Y' }} Buurtcampus</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,81 @@
+{% render 'partials/head.liquid', title: 'BuurtCampuskrant' %}
+<button id='openBtn'>
+    <img src="/assets/1.LOGOS/Een-dag-bij-Buurtcampus.png" class="menuBtn">
+</button>
+<nav id="sideNav">
+    
+    <svg onclick="closeNav()" viewBox="0 0 32 32" width="32" height="32">
+			<title>Sluiten</title>
+			<path
+				d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z">
+			</path>
+		</svg>
+    <ul>
+                {% for district in districts%}
+                    
+
+                        <li><a href="/district/{{ district }}" class="district-nav district-{{ story.district }}">{{ district |capitalize }}</a></li>
+                    
+                {% endfor %}
+                <li><a href="/archief" class="district-nav district-{{ story.district }}">Archief</a></li>
+                </ul>
+            
+     </nav>
+    </header>
+
+<article class="story-detail">
+  <h2 class=>{{ story.title }}</h2>
+  <p class="district-tag">{{ story.target_group |capitalize }}</p>
+  <p class="intro">{{ story.intro }}</p>
+  
+  <div>
+    {{ story.body}}
+  </div>
+</article>
+
+<section class="comment-form-section">
+  <h2>Laat een reactie achter!</h2>
+
+  {% if success %}
+    <div class="alert alert-success">
+      <p>✓ Je reactie is geplaatst!</p>
+      <span class="succes"></span>
+    </div>
+  {% endif %}
+
+  {% if error == 'missing-fields' %}
+    <div class="alert alert-error">
+      <p>✗ Vul alle velden in!</p>
+      <span class="error"></span>
+    </div>
+  {% elsif error == 'post-failed' %}
+    <div class="alert alert-error">
+      <p>✗ Er is iets misgegaan, probeer het opnieuw.</p>
+      <span class="error"></span>
+    </div>
+  {% endif %}
+
+
+  <form action="/story/{{ story.slug }}" method="POST">
+    <input type="hidden" name="story_id" value="{{ story.id }}">
+    <textarea name="comment" placeholder="Laat een reactie achter!"></textarea>
+    <input type="text" name="name" placeholder="Vul hier je naam in!">
+    <button type="submit">Verstuur</button>
+  </form>
+</section>
+
+<section class="comments-section">
+  <h2>Reacties ({{ comments.size }})</h2>
+  {% for comment in comments %}
+    <div class="comment-card" id="comment-{{ comment.id }}">
+      <span class="comment-user">{{ comment.name }}</span>
+      <p>{{ comment.comment }}</p>
+      <form action="/story/{{ story.slug }}" method="POST">
+        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+        <button type="submit">Verwijder</button>
+      </form>
+    </div>
+  {% endfor %}
+</section>
+
+{% render 'partials/foot.liquid' %}

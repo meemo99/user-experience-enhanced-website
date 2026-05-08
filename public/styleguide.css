@@ -1,0 +1,61 @@
+/* CSS nesting: Newly Available */
+/* wildely available */
+:root {
+    /* custom properties: wildely available */
+
+    /* colours */
+    /* rgb: wildely available */
+    --nieuw-west-primary: rgb(142, 163, 75);
+    --zuidoost-primary: rgb(8, 91, 100);
+    --oost-primary: rgb(51, 52, 103);
+    --primary-bg: rgb(180, 189, 208);
+    --secondary-bg: rgb(234, 91, 12);
+    --mud-bg: rgb(105, 96, 79);
+    --kauwgom-bg: rgb(249, 193, 157);
+    --text-colour-primary: rgb(51, 52, 103);
+    --text-colour-secondary: rgb(255, 255, 255);
+    --comment-bg: #f0f0f0;
+    --comment-input-bg: #e0e0e0;
+    --comment-text: #333;
+
+
+    /* font */
+    --font-heading: 28pt;
+    --font-subheading: 18pt;
+    --font-intro: 12pt;
+    --font-body: 10pt;
+    --font-bullets: 10pt;
+    --font-subkop: 10pt;
+    --font-xs: 0.8rem;
+
+
+    /* sizing */
+    --border-radius: 10px;
+    --padding: 0.25rem 1rem;
+}
+
+/* inverted-colors media-query: Limited availability */
+@media (inverted-colors: inverted) {
+    :root {
+        --nieuw-west-primary: rgb(113, 92, 180);
+        --zuidoost-primary: rgb(247, 164, 155);
+        --oost-primary: rgb(204, 203, 152);
+        --primary-bg: rgb(75, 66, 47);
+        --secondary-bg: rgb(21, 164, 243);
+        --mud-bg: rgb(150, 159, 176);
+        --text-colour-primary: rgb(204, 203, 152);
+        --text-colour-secondary: rgb(0, 0, 0);
+    }
+}
+
+/* wildely available */
+@font-face {
+    /* wildely available */
+    font-family: 'BuurtCampusArial';
+    src: url("assets/2.font/BuurtCampusArial/Web-PS/BuurtCampusArial-Bold.woff2") format("woff2"),
+        url("assets/2.font/BuurtCampusArial/OpenType-TT/BuurtCampusArial-Bold.ttf") format("truetype");
+    /* wildely available */
+    font-weight: bold;
+    /* wildely available */
+    font-style: normal;
+}

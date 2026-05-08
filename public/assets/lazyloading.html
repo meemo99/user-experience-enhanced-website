@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li{
+            height: 120vh;
+        }
+        img{
+            background: #efefef
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p>This is a basic HTML document.</p>
+
+<ul>
+    <li><img src="https://picsum.photos/id/0/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/1/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/2/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/3/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/4/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/5/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/6/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/7/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/8/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/9/5000/3333" loading="lazy" width="600" height="400"></li>
+    <li><img src="https://picsum.photos/id/10/5000/3333" loading="lazy" width="600" height="400"></li>
+</ul>
+
+<!-- Score form met action naar de route /score -->
+<form method="post" action="/score">
+
+    <fieldset>
+        <legend>Team A</legend>
+        <label>
+        <span>Punten:</span>
+        <input type="number" name="score_team_1" placeholder="score" value="{{ scores[0].score_team_1 }}">
+        </label>
+    </fieldset>
+
+    <fieldset>
+        <legend>Team B</legend>
+        <label>
+        <span>Punten:</span>
+        <input type="number" name="score_team_2" placeholder="score" value="{{ scores[0].score_team_2 }}">
+        </label>
+    </fieldset>
+
+    <button type="submit">Save score</button>
+
+</form>
+
+<!-- Scoreverloop, met in de loop de partial score.liquid -->
+<section id="score">
+    <h2>Scoreverloop</h2>
+
+    <ol>
+
+    {% for score in scores %}        
+        <li>
+            Team A: {{ score.score_team_1 }}        
+            <br>Team B: {{ score.score_team_2 }}        
+            <br>date: {{ score.date_created | date: '%d-%m-%Y %H:%M' }}
+        </li>
+
+    {% endfor %}
+
+    </ol>
+
+</section>
+
+
+<!-- Client-Side script voor enhancement -->
+<!-- type="module" is een feature detection
+      browsers die dat ondersteuenen, ondersteunen ook fetch (en andere js methoden) 
+      https://snugug.com/musings/modern-cutting-the-mustard/
+-->
+<script type="module"> 
+
+  const scoreForm = document.querySelector("form")
+  const formButton = document.querySelector("form button")
+  const scores = document.querySelector("#score ol")
+
+  // Als er op de submit button wordt geklikt ...
+  scoreForm.addEventListener("submit", async function(event) {
+    // Voorkom de standaard submit van de browser
+    // Let op: hiermee overschrijven we de default Loading state van de browser...
+    event.preventDefault()
+    
+    //Loading state tonen:
+    formButton.classList.add("loading")
+    formButton.textContent = "loading..."
+
+    //formdata voorbereiden:
+    let formData = new FormData(scoreForm);    
+
+    // Data fetchen:
+    // Doe een fetch naar de server, net als hoe de browser dit normaal zou doen
+    // Gebruik daarvoor het action en method attribuut van het formulier
+    // Stuur de formulierelementen mee
+    const response = await fetch(scoreForm.action, {
+      method: scoreForm.method, //POST dus
+      body: new URLSearchParams(formData) // <<< Dit moet omdat server.js anders niet met de formulier data kan werken
+    })
+
+    // Data verwerken:
+    // De server geeft data terug als het posten goed gaat
+    const responseData = await response.text()
+
+    // Normaal zou de browser die HTML parsen en weergeven, maar daar moeten we nu zelf iets mee
+    // Parse de nieuwe HTML en maak hiervan een nieuw Document Object Model in het geheugen
+    const parser = new DOMParser()
+    const responseDOM = parser.parseFromString(responseData, 'text/html')
+
+    // Zoek in die nieuwe HTML DOM onze nieuwe UI state op, die we via Liquid hebben klaargemaakt
+    const newState = responseDOM.querySelector('#score ol')
+
+    // data van de server toevoegen aan de DOM, aan de scorelijst in de ol
+    // Overschrijf de HTML met de nieuwe HTML
+    scores.innerHTML = newState.innerHTML
+
+    // Loading state weghalen
+    // Nu kan je waarschijnlijk de Loading state vervangen door een Success state
+    console.log("Loading state weghalen")
+    formButton.classList.remove("loading")
+    formButton.textContent = "Save score"
+
+  })
+
+</script>
+
+
+</body>
+</html>

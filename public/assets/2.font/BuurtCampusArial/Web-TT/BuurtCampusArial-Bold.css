@@ -1,0 +1,11 @@
+/* Webfont: BuurtCampusArial-Bold */@font-face {
+    font-family: 'BuurtCampusArial';
+    src: url('BuurtCampusArial-Bold.eot'); /* IE9 Compat Modes */
+    src: url('BuurtCampusArial-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('BuurtCampusArial-Bold.woff') format('woff'), /* Modern Browsers */
+         url('BuurtCampusArial-Bold.ttf') format('truetype'); /* Safari, Android, iOS */
+             font-style: normal;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+}
+
