@@ -293,6 +293,11 @@ nav {
         transform: translateY(-4px);
     }
 
+    & p,
+    h2 {
+        margin-inline: 1rem;
+        margin-bottom: .5rem;
+    }
 
 
     & a {
