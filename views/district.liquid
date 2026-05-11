@@ -25,6 +25,8 @@
      </nav>
     </header>
 
+    
+
 <section class="art-container">
   {% for story in district %}
     <article class="index-article district-{{ story.district }}">
@@ -37,11 +39,11 @@
 {% endif %}
       <div class="tags">
         <span class="district-tag">{{ story.district | capitalize }}</span>
-        <p class="district-tag">{{ story.target_group |capitalize }}</p>
+        <span class="district-tag">{{ story.target_group |capitalize }}</span>
       </div>
       <h2>{{ story.title }}</h2>
       <p>{{ story.intro }}</p>
-      <a href="/story/{{ story.slug }}" class="leesmeer">Lees meer</a>
+      <a href="/story/{{ story.slug }}" class="leesmeer district-tag">Lees meer</a>
     </article>
   {% endfor %}
 </section>
