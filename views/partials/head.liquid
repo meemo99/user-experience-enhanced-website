@@ -8,15 +8,19 @@
         <link rel="stylesheet" href="/styleguide.css">
         <script type="module">
 		/* Schrijf hier eventueel je client-side JavaScript */
-		function openNav() {
-			document.getElementById("sideNav").style.width = "250px";
-		}
-		function closeNav() {
-			document.getElementById("sideNav").style.width = "0";
-		}
+		document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.getElementById('sideNav');
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
 
-		document.getElementById("openBtn").addEventListener("click", openNav);
-		document.querySelector("svg").addEventListener("click", closeNav);
+    openBtn.addEventListener('click', () => {
+        nav.style.width = '250px';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        nav.style.width = '0';
+    });
+});
 
   const commentSection = document.querySelector(".comment-form-section form")
   const formButton = document.querySelector("form button")
@@ -83,5 +87,6 @@
 
     <body>
         <header>
-        <a href="/"><h1>{{ title }} {{ districtName | capitalize}}</h1></a>
+        <a href="/"><img  class ="header-logo" src="/assets/1.LOGOS/04 Buurtcampus Algemeen/02 Lang/Lang_Blurple.png"></a>
+        
         
