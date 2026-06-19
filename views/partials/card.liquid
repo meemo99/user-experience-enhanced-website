@@ -1,0 +1,24 @@
+{% for story in stories offset: 1 %}
+  <article class="index-article district-{{ story.district }}">
+    {% if story.cover %}
+      <picture>
+        <img
+          src="https://fdnd-agency.directus.app/assets/{{ story.cover }}?width=600"
+          width="{{ story.cover.width }}"
+          height="{{ story.cover.height }}"
+          alt="{{ story.title }}"
+          class="cover"
+        >
+      </picture>
+    {% endif %}
+    <div class="tags">
+      <span class="district-tag">{{ story.district | capitalize }}</span>
+      <button class="heart-btn" id="heartBtn" aria-label="Like">
+        <img id="heartImg" src="/assets/Samenwerking.png" alt="heart" onclick="this.classList.toggle('liked')">
+      </button>
+    </div>
+    <h3>{{ story.title }}</h3>
+    <p>{{ story.intro | truncatewords: 20 }}</p>
+    <a href="/story/{{ story.slug }}" class="district-tag">Lees meer </a>
+  </article>
+{% endfor %}
