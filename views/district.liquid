@@ -1,23 +1,14 @@
-{% render 'partials/head.liquid', title: 'BuurtCampuskrant' %}
+{% render 'partials/head.liquid' %}
 <button id='openBtn'>
   <picture>
     <img src="/assets/1.LOGOS/Buurtcampus82.png" class="menuBtn">
     </picture>
 </button>
 <nav id="sideNav">
-    
-    <svg onclick="closeNav()" viewBox="0 0 32 32" width="32" height="32">
-			<title>Sluiten</title>
-			<path
-				d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z">
-			</path>
-		</svg>
+ <button id="closeBtn" class="close-btn" aria-label="Sluiten"></button>
     <ul>
                 {% for district in districts%}
-                    
-                    
                         <li><a href="/district/{{ district }}" class="district-nav district-{{ story.district }}">{{ district |capitalize }}</a></li>
-                    
                 {% endfor %}
                 <li><a href="/archief" class="district-nav">Archief</a></li>
                 </ul>
@@ -25,27 +16,87 @@
      </nav>
     </header>
 
-    
 
-<section class="art-container">
-  {% for story in district %}
-    <article class="index-article district-{{ story.district }}">
+    <section class="filter-header">
+      <img src="/assets/1.LOGOS/Stekje.png" alt="Header image" class="menuBtn">
+<h2 id="district-title">{{ districtName | capitalize }}</h2>
+</section>
+<main class="page-layout">
+  <aside class="filter-sidebar">
+      <h4>Filter</h4>
+     <section class="filter-group">
+    {% assign sortQuery = '' %}
+    {% if activeSort %}
+      {% assign sortQuery = '&sort=' | append: activeSort %}
+    {% endif %}
+
+    <ul>
+      <li>
+        <a
+          href="/district/{{ districtName }}?{{ sortQuery | remove_first: '&' }}"
+          class=" filter-btn {% if activeGroup == '' %}active{% endif %}"
+        >
+          Alles
+        </a>
+      </li>
+
+      {% for group in targetGroups %}
+        <li>
+          <a
+            href="/district/{{ districtName }}?target_group={{ group }}{{ sortQuery }}"
+            class="filter-btn {% if activeGroup == group %}active{% endif %}"
+          >
+            {{ group | capitalize }}
+          </a>
+        </li>
+      {% endfor %}
+
+        <li class="filter-divider" aria-hidden="true"></li>
+        <li>
+        <div class='select-wrapper'>
+          <h4>Sorteer</h4>
+          <select id="sortSelect">
+            <option value="nieuw-oud">Nieuw–Oud</option>
+            <option value="oud-nieuw">Oud–Nieuw</option>
+            <option value="az">A–Z</option>
+          </select>
+        </div>
+        </section>
+        </li>
+      </ul>
+    </section>
+  </aside>
+
+  
+  <div class="art-container" id="stories-container">
+    {% for story in district %}
+    <article 
+      class="index-article district-{{ story.district }}"
+      style="view-transition-name: story-{{ story.slug }}"
+    >
       {% if story.cover %}
-  <img 
-    src="https://fdnd-agency.directus.app/assets/{{ story.cover }}"   
-    width="{{cover.width}}"
-    alt="{{ story.title }}"
-    class="cover">
-{% endif %}
+      <img
+        src="https://fdnd-agency.directus.app/assets/{{ story.cover.id }}?width=600&quality=80"
+        width="{{ story.cover.width }}"
+        height="{{ story.cover.height }}"
+        alt="{{ story.title }}"
+        class="cover"
+        loading="lazy">
+      {% endif %}
       <div class="tags">
         <span class="district-tag">{{ story.district | capitalize }}</span>
-        <span class="district-tag">{{ story.target_group |capitalize }}</span>
+        <div class="wrap">
+          <button class="heart-btn" id="heartBtn" aria-label="Like">
+            <img id="heartImg" src="/assets/Samenwerking.png" alt="heart" onclick="this.classList.toggle('liked')" />
+          </button>
+        </div>
       </div>
-      <h2>{{ story.title }}</h2>
-      <p>{{ story.intro }}</p>
-      <a href="/story/{{ story.slug }}" class="leesmeer district-tag">Lees meer</a>
+      <h3>{{ story.title }}</h3>
+      <p>{{ story.intro | truncatewords: 20}}</p>
+      <a href="/story/{{ story.slug }}" class="district-tag">Lees meer</a>
     </article>
-  {% endfor %}
-</section>
+    {% endfor %}
+  </div>
+</main>
 
 {% render 'partials/foot.liquid' %}
