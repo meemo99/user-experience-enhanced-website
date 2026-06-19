@@ -32,10 +32,29 @@ app.get('/', async function (req, res) {
 
 app.get('/district/:district_name', async function (req, res) {
     const district = req.params.district_name
-    const districtDetailResponse = await fetch(`${baseURL}?${params.toString()}`)
+    const targetGroup = req.query.target_group || ''
 
+
+    let url = 'https://fdnd-agency.directus.app/items/buurtcampuskrant_stories/?filter[district][_eq]=' + district + '&fields=*,cover.id,cover.width,cover.height'
+
+    if (targetGroup) {
+        url += '&filter[target_group][_eq]=' + targetGroup
+    }
+
+    const districtDetailResponse = await fetch(url)
     const districtDetailResponseJSON = await districtDetailResponse.json()
-    res.render('district.liquid', { district: districtDetailResponseJSON.data, districtName: district })
+
+
+    const allResponse = await fetch('https://fdnd-agency.directus.app/items/buurtcampuskrant_stories/?filter[district][_eq]=' + district + '&fields=target_group')
+    const allJSON = await allResponse.json()
+    const targetGroups = [...new Set(allJSON.data.map(s => s.target_group).filter(Boolean))]
+
+    res.render('district.liquid', {
+        district: districtDetailResponseJSON.data,
+        districtName: district,
+        targetGroups: targetGroups,
+        activeGroup: targetGroup
+    })
 })
 
 app.get('/story/:slug', async function (req, res) {
